@@ -5,15 +5,15 @@ const STATUSES = ["all", "new", "contacted", "converted"];
 
 function StatusPill({ status }) {
   const styles = {
-    new: "bg-gray-100 text-gray-700 border-gray-200",
-    contacted: "bg-amber-50 text-amber-700 border-amber-200",
-    converted: "bg-emerald-50 text-emerald-700 border-emerald-200"
+    new: "bg-slate-100 text-slate-700 ring-slate-200",
+    contacted: "bg-amber-50 text-amber-700 ring-amber-200",
+    converted: "bg-emerald-50 text-emerald-700 ring-emerald-200"
   };
 
   return (
     <span
-      className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold ${
-        styles[status] || "bg-gray-100 text-gray-700 border-gray-200"
+      className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ${
+        styles[status] || "bg-slate-100 text-slate-700 ring-slate-200"
       }`}
     >
       {status}
@@ -90,10 +90,7 @@ export default function App() {
 
   const filteredLeads = useMemo(() => {
     return leads
-      .filter((l) => {
-        if (statusFilter === "all") return true;
-        return l.status === statusFilter;
-      })
+      .filter((l) => (statusFilter === "all" ? true : l.status === statusFilter))
       .filter((l) => {
         if (!search.trim()) return true;
         const s = search.toLowerCase();
@@ -106,55 +103,56 @@ export default function App() {
   }, [leads, statusFilter, search]);
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       {/* Top Bar */}
-      <div className="sticky top-0 z-10 border-b bg-white/80 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          <div>
-            <div className="text-sm font-semibold text-slate-900">Mini CRM</div>
-            <div className="text-xs text-slate-500">
-              Lead Management Dashboard
+      <div className="sticky top-0 z-10 border-b border-slate-200 bg-white/90 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-xl bg-blue-600" />
+            <div>
+              <div className="text-base font-bold text-slate-900">Mini CRM</div>
+              <div className="text-sm text-slate-500">
+                Lead Management Dashboard
+              </div>
             </div>
           </div>
 
           {token ? (
             <button
               onClick={handleLogout}
-              className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50"
             >
               Logout
             </button>
           ) : (
-            <span className="text-xs text-slate-500">Admin only</span>
+            <span className="text-sm text-slate-500">Admin only</span>
           )}
         </div>
       </div>
 
-      <div className="mx-auto max-w-6xl px-4 py-6">
+      <div className="mx-auto max-w-6xl px-4 py-8">
         {/* Error */}
         {error && (
-          <div className="mb-4 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
+          <div className="mb-5 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
             {error}
           </div>
         )}
 
         {/* Login */}
         {!token && (
-          <div className="mx-auto max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <h2 className="text-lg font-semibold text-slate-900">
-              Admin Login
-            </h2>
+          <div className="mx-auto max-w-md rounded-2xl border border-slate-200 bg-white p-7 shadow-sm">
+            <h2 className="text-xl font-bold text-slate-900">Admin Login</h2>
             <p className="mt-1 text-sm text-slate-500">
               Login to view and manage website inquiries.
             </p>
 
-            <div className="mt-5 space-y-3">
+            <div className="mt-6 space-y-4">
               <div>
-                <label className="text-xs font-medium text-slate-600">
+                <label className="text-xs font-semibold text-slate-600">
                   Email
                 </label>
                 <input
-                  className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500"
+                  className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="admin@example.com"
@@ -162,12 +160,12 @@ export default function App() {
               </div>
 
               <div>
-                <label className="text-xs font-medium text-slate-600">
+                <label className="text-xs font-semibold text-slate-600">
                   Password
                 </label>
                 <input
                   type="password"
-                  className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500"
+                  className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
@@ -177,7 +175,7 @@ export default function App() {
               <button
                 onClick={handleLogin}
                 disabled={loading}
-                className="w-full rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-60"
+                className="w-full rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white shadow-sm hover:bg-blue-700 disabled:opacity-60"
               >
                 {loading ? "Logging in..." : "Login"}
               </button>
@@ -189,64 +187,72 @@ export default function App() {
         {token && (
           <>
             {/* Controls */}
-            <div className="mb-4 flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex flex-wrap gap-2">
-                {STATUSES.map((s) => (
-                  <button
-                    key={s}
-                    onClick={() => setStatusFilter(s)}
-                    className={`rounded-lg px-3 py-2 text-sm font-medium ${
-                      statusFilter === s
-                        ? "bg-slate-900 text-white"
-                        : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                    }`}
-                  >
-                    {s}
-                  </button>
-                ))}
-              </div>
+            <div className="mb-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex flex-wrap gap-2">
+                  {STATUSES.map((s) => (
+                    <button
+                      key={s}
+                      onClick={() => setStatusFilter(s)}
+                      className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${
+                        statusFilter === s
+                          ? "bg-slate-900 text-white"
+                          : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                      }`}
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
 
-              <input
-                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500 sm:max-w-xs"
-                placeholder="Search name / email / message..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
+                <input
+                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 sm:max-w-sm"
+                  placeholder="Search name / email / message..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
             </div>
 
             {/* Leads */}
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-6 md:grid-cols-2">
               {filteredLeads.map((lead) => (
                 <div
                   key={lead._id}
-                  className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+                  className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md"
                 >
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <div className="text-base font-semibold text-slate-900">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="min-w-0">
+                      <div className="truncate text-lg font-bold text-slate-900">
                         {lead.name}
                       </div>
-                      <div className="text-sm text-slate-600">{lead.email}</div>
+                      <div className="truncate text-sm text-slate-600">
+                        {lead.email}
+                      </div>
                     </div>
 
                     <StatusPill status={lead.status} />
                   </div>
 
-                  <div className="mt-3 rounded-xl bg-slate-50 p-3 text-sm text-slate-700">
-                    <div className="text-xs font-semibold text-slate-500">
+                  <div className="mt-4 rounded-xl bg-slate-50 p-4">
+                    <div className="text-xs font-bold text-slate-500">
                       Message
                     </div>
-                    <div className="mt-1">{lead.message || "-"}</div>
+                    <div className="mt-2 text-sm text-slate-700">
+                      {lead.message || "-"}
+                    </div>
                   </div>
 
-                  <div className="mt-4 flex items-center gap-2">
-                    <span className="text-xs font-semibold text-slate-500">
+                  <div className="mt-5 flex items-center gap-3">
+                    <span className="text-xs font-bold text-slate-500">
                       Status
                     </span>
                     <select
-                      className="rounded-lg border border-slate-200 bg-white px-2 py-2 text-sm outline-none focus:border-blue-500"
+                      className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                       value={lead.status}
-                      onChange={(e) => handleChangeStatus(lead._id, e.target.value)}
+                      onChange={(e) =>
+                        handleChangeStatus(lead._id, e.target.value)
+                      }
                     >
                       <option value="new">new</option>
                       <option value="contacted">contacted</option>
@@ -254,13 +260,11 @@ export default function App() {
                     </select>
                   </div>
 
-                  <div className="mt-4">
-                    <div className="text-xs font-semibold text-slate-500">
-                      Notes
-                    </div>
+                  <div className="mt-5">
+                    <div className="text-xs font-bold text-slate-500">Notes</div>
 
                     <input
-                      className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500"
+                      className="mt-3 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                       placeholder="Add note and press Enter..."
                       onKeyDown={(e) => {
                         if (e.key === "Enter") {
@@ -272,12 +276,12 @@ export default function App() {
                       }}
                     />
 
-                    <ul className="mt-3 space-y-2">
+                    <ul className="mt-4 space-y-2">
                       {lead.notes?.length ? (
                         lead.notes.map((n, i) => (
                           <li
                             key={i}
-                            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700"
+                            className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700"
                           >
                             {n.text}
                           </li>
@@ -291,7 +295,7 @@ export default function App() {
               ))}
 
               {filteredLeads.length === 0 && (
-                <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-500 md:col-span-2">
+                <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center text-sm text-slate-500 md:col-span-2">
                   No leads match your filters.
                 </div>
               )}
